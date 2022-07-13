@@ -1,0 +1,8 @@
+.idea
+logs
+*.log
+bin
+docker
+go.sum
+ginsample.db
+ginsample

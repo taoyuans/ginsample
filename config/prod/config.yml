@@ -1,0 +1,16 @@
+DataBase:
+  DriverName: mysql
+  DataSourceName: root:1234@tcp(127.0.0.1:3306)/testdb?charset=utf8&parseTime=true&loc=Asia%2FShanghai
+  MaxOpenConn: 20
+  MaxIdleConn: 10
+  MaxConnLifeTime: 100
+  
+Redis:
+  ProxyList: 127.0.0.1:6379
+  ConnTimeout: 500
+  Password: ""
+  DB: 0
+  ReadTimeout: 1000
+  WriteTimeout: 1000
+  MaxActive: 200
+  MaxIdle: 500
