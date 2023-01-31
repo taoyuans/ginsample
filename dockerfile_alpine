@@ -1,0 +1,28 @@
+FROM golang AS builder
+WORKDIR /go/src/app
+COPY ./ /go/src/app
+
+# disable cgo
+ENV CGO_ENABLED=0
+# build steps
+ENV GO111MODULE=on
+ENV GOPROXY=https://goproxy.cn,direct
+
+RUN echo ">>> 1: go version" && go version \
+&& echo ">>> 2: go mod tidy" && go mod tidy \
+&& echo ">>> 3: go install" && go install
+
+# make application docker image use alpine
+FROM golang:alpine
+
+WORKDIR /go/bin/
+# copy config files to image
+COPY --from=builder /go/src/app/config/config.yml /go/bin/config/config.yml
+COPY --from=builder /go/src/app/config/prod/config.yml /go/bin/config/prod/config.yml
+# COPY --from=builder /go/src/app/ginsample.db ./go/bin/ginsample.db
+# copy execute file to image
+COPY --from=builder /go/bin/ ./
+
+EXPOSE 9001
+
+CMD /go/bin/ginsample -mode=api -env=prod

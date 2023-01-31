@@ -2,30 +2,42 @@ package main
 
 import (
 	"flag"
-	"ginsample/component/apis"
-	"ginsample/component/models"
-	"ginsample/lib/errs"
-	"ginsample/lib/filters"
+	"fmt"
+	"io"
 	"log"
 	"os"
-	"sort"
 	"time"
 
+	"ginsample/component/models"
+	"ginsample/component/routers"
 	configutil "ginsample/config"
-	"ginsample/lib/middleware"
+	"ginsample/lib/errs"
+	"ginsample/lib/goutils"
 
 	"github.com/gin-gonic/gin"
-	"github.com/urfave/cli/v2"
 	_ "gorm.io/driver/mysql"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 var (
-	appEnv = flag.String("app-env", os.Getenv("APP_ENV"), "app env")
+	mode   = flag.String("mode", "", "please input run mode.")
+	appEnv = flag.String("env", "", "please input app env.")
 )
 
 func main() {
+	flag.Parse()
+	if *mode == "" || *appEnv == "" {
+		flag.Usage()
+		os.Exit(1)
+	}
+	fmt.Printf(" - using mode:		mode = %s\n", *mode)
+	fmt.Printf(" - using app_env:	app_env = %s\n", *appEnv)
+
+	if !goutils.InArrayString(*appEnv, []string{"dev", "test", "prod"}) {
+		fmt.Printf("[ERROR]  app_env=%s is not allowed.\n", *appEnv)
+		os.Exit(1)
+	}
 
 	config := initConfigInformation()
 
@@ -34,64 +46,34 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	gormDB.AutoMigrate(&models.User{})
 
-	app := cli.NewApp()
-	app.Name = "ginsample-api"
-	app.Commands = []*cli.Command{
-		{
-			Name:    "api-server",
-			Aliases: []string{"a"},
-			Usage:   "run api server",
-			Action: func(cliContext *cli.Context) error {
-				if err := initGinApp(gormDB, cliContext).Run(":" + config.HttpPort); err != nil {
-					log.Println(errs.Trace(err))
-					return err
-				}
-				return nil
-			},
-		},
-		{
-			Name:    "init-data",
-			Aliases: []string{"i"},
-			Usage:   "init data",
-			Action: func(c *cli.Context) error {
-				models.InitData(gormDB)
-				return nil
-			},
-		},
+	switch *mode {
+	case "api":
+		if err := initGinApp(gormDB).Run(":" + config.HttpPort); err != nil {
+			log.Println(errs.Trace(err))
+			os.Exit(1)
+		}
+	case "init":
+		models.InitData(gormDB)
+	default:
+		fmt.Printf("[ERROR]  mode=%s is not allowed.\n", *mode)
+		os.Exit(1)
 	}
-
-	sort.Sort(cli.FlagsByName(app.Flags))
-	sort.Sort(cli.CommandsByName(app.Commands))
-	app.Run(os.Args)
-
 }
 
-func initGinApp(gormDB *gorm.DB, cliContext *cli.Context) *gin.Engine {
-	sqlDB, err := gormDB.DB()
-	if err != nil {
-		panic(err)
-	}
-	// SetMaxIdleConns 设置空闲连接池中连接的最大数量
-	sqlDB.SetMaxIdleConns(10)
-	// SetMaxOpenConns 设置打开数据库连接的最大数量。
-	sqlDB.SetMaxOpenConns(20)
-	// SetConnMaxLifetime 设置了连接可复用的最大时间。
-	sqlDB.SetConnMaxLifetime(100 * time.Second)
+func initGinApp(gormDB *gorm.DB) *gin.Engine {
+	setSqlDBConfig(gormDB)
 
-	r := gin.New()
+	// Logging to a file.
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f)
 
-	r.Static("/static", "static")
-	r.Use(gin.Logger())
-	// r.Pre(middleware.RemoveTrailingSlash())
-	r.Use(gin.Recovery())
-	// r.Use(cors.New(auth.CorsConfig(config)))
-	// e.Use(middleware.Logger())
-	r.Use(middleware.SetRequestID())
-	r.Use(filters.SetDBMiddleware(gormDB))
+	gin.DisableConsoleColor()
+	// gin.ForceConsoleColor()
 
-	apis.InitApis(r)
+	r := routers.InitRouter(gormDB)
 
 	return r
 }
@@ -103,4 +85,17 @@ func initConfigInformation() configutil.Config {
 	}
 
 	return config
+}
+
+func setSqlDBConfig(gormDB *gorm.DB) {
+	sqlDB, err := gormDB.DB()
+	if err != nil {
+		panic(err)
+	}
+	// SetMaxIdleConns 设置空闲连接池中连接的最大数量
+	sqlDB.SetMaxIdleConns(10)
+	// SetMaxOpenConns 设置打开数据库连接的最大数量。
+	sqlDB.SetMaxOpenConns(20)
+	// SetConnMaxLifetime 设置了连接可复用的最大时间。
+	sqlDB.SetConnMaxLifetime(100 * time.Second)
 }

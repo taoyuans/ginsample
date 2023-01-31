@@ -12,4 +12,4 @@ RUN echo ">>> 1: go version" && go version \
 
 #原始方式：直接镜像内打包编译
 RUN go build -o ./bin/ginsample
-CMD ./bin/ginsample a
+CMD ./bin/ginsample -mode=api -env=prod

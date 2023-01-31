@@ -49,9 +49,9 @@ export GO111MODULE=on && export GOPROXY=https://goproxy.cn
 go mod tidy
 
 //初始化数据
-go run main.go i
+go run main.go -mode=init -env=dev
 //运行服务
-go run main.go a
+go run main.go -mode=api -env=prod
 ```
 
 访问: <http://127.0.0.1:9001/>
@@ -89,7 +89,7 @@ docker run -d --name ginsample-container -i -e APP_ENV=prod -p 40001:9001 ginsam
 
 [MIT](https://github.com/taoyuans/ginsample/blob/main/LICENSE)
 
-Copyright (c) 2022 li_mingxie
+Copyright (c) 2023 li_mingxie
 
 ----------------------------------------------
 

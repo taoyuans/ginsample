@@ -7,9 +7,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-type ExecuteMode string
+var ConfigValue *Config
 
 type Config struct {
+	GinMode  string
 	DataBase struct {
 		DriverName      string
 		DataSourceName  string
@@ -21,7 +22,7 @@ type Config struct {
 	Service  string
 }
 
-func Read(env string, config interface{}) error {
+func Read(env string, config *Config) error {
 	if env == "" {
 		env = "dev"
 	}
@@ -31,6 +32,7 @@ func Read(env string, config interface{}) error {
 	if err := viper.ReadInConfig(); err != nil {
 		return fmt.Errorf("Fatal error config file: %s \n", err)
 	}
+
 	if env != "" {
 		f, err := os.Open("config/" + env + "/config.yml")
 		if err != nil {
@@ -43,5 +45,6 @@ func Read(env string, config interface{}) error {
 	if err := viper.Unmarshal(config); err != nil {
 		return fmt.Errorf("Fatal error config file: %s \n", err)
 	}
+	ConfigValue = config
 	return nil
 }

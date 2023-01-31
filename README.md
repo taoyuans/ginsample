@@ -1,7 +1,5 @@
 # ginsample
 
-<!-- [![Build Status](https://github.com/wenjianzhang/go-admin/workflows/build/badge.svg)](https://github.com/go-admin-team/go-admin)
-[![Release](https://img.shields.io/github/release/go-admin-team/go-admin.svg?style=flat-square)](https://github.com/go-admin-team/go-admin/releases) -->
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/taoyuans/ginsample)
 
 English | [简体中文](https://github.com/taoyuans/ginsample/blob/main/README_zh-CN.md)
@@ -49,9 +47,9 @@ export GO111MODULE=on && export GOPROXY=https://goproxy.cn
 go mod tidy
 
 //init data
-go run main.go i
+go run main.go -mode=init -env=dev
 //run
-go run main.go a
+go run main.go -mode=api -env=prod
 ```
 
 Visit <http://127.0.0.1:9001/>
@@ -77,8 +75,6 @@ docker run -d --name ginsample-container -i -e APP_ENV=prod -p 40001:9001 ginsam
 - orm tool: [gorm](https://gorm.io/)
 - logger : [logrus](https://github.com/sirupsen/logrus)
 - configuration tool: [viper](https://github.com/spf13/viper)
-<!-- - validator: [govalidator](github.com/asaskevich/govalidator)
-- utils: <https://github.com/pangpanglabs/goutils> -->
 
 ## References
 
@@ -89,7 +85,7 @@ docker run -d --name ginsample-container -i -e APP_ENV=prod -p 40001:9001 ginsam
 
 [MIT](https://github.com/taoyuans/ginsample/blob/main/LICENSE)
 
-Copyright (c) 2022 li_mingxie
+Copyright (c) 2023 li_mingxie
 
 ----------------------------------------------
 
