@@ -1,3 +1,6 @@
+Service: ginsample
+HttpPort: 9001
+
 DataBase:
   DriverName: mysql
   DataSourceName: root:1234@tcp(127.0.0.1:3306)/testdb?charset=utf8&parseTime=true&loc=Asia%2FShanghai
@@ -5,5 +8,7 @@ DataBase:
   MaxIdleConn: 10
   MaxConnLifeTime: 100
 
-HttpPort: 9001
-Service: ginsample
+Log:
+  Useable: true
+  LogFilePath: ./logs
+  LogFileName: ginsample.log

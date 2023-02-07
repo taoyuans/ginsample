@@ -11,6 +11,8 @@ var ConfigValue *Config
 
 type Config struct {
 	GinMode  string
+	HttpPort string
+	Service  string
 	DataBase struct {
 		DriverName      string
 		DataSourceName  string
@@ -18,8 +20,11 @@ type Config struct {
 		MaxIdleConn     string
 		MaxConnLifeTime string
 	}
-	HttpPort string
-	Service  string
+	Log struct {
+		Useable     bool
+		LogFilePath string
+		LogFileName string
+	}
 }
 
 func Read(env string, config *Config) error {

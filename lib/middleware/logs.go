@@ -13,11 +13,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func LogMiddleWare() gin.HandlerFunc {
-	var (
-		logFilePath = "./logs" //文件存储路径
-		logFileName = "ginsample.log"
-	)
+func LogMiddleWare(logFilePath, logFileName string) gin.HandlerFunc {
 	// create log filename
 	fileName := path.Join(logFilePath, logFileName)
 	// open file

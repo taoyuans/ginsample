@@ -1,7 +1,9 @@
 package apis
 
 import (
+	"fmt"
 	"ginsample/component/models"
+	configutil "ginsample/config"
 	"ginsample/lib/factory"
 	"ginsample/lib/response"
 	"net/http"
@@ -22,6 +24,7 @@ func (c UserApi) GetUsers(ctx *gin.Context) {
 	if err != nil {
 		response.ApiFail(ctx, response.ApiErrorDB, err, nil)
 	}
+	fmt.Printf("%v", configutil.ConfigValue)
 
 	factory.Logger(ctx.Request.Context()).Warn("log_warn test")
 

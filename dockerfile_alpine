@@ -25,7 +25,6 @@ COPY --from=builder /go/src/app/config/prod/config.yml /go/bin/config/prod/confi
 # copy execute file to image
 COPY --from=builder /go/bin/ ./
 
-
 EXPOSE 9001
 
 CMD /go/bin/ginsample -mode=api -env=prod

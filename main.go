@@ -11,12 +11,12 @@ import (
 	configutil "ginsample/config"
 	"ginsample/lib/errs"
 	"ginsample/lib/goutils"
+	"ginsample/lib/middleware"
 
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 
 	"gorm.io/driver/mysql"
-	_ "gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -40,6 +40,7 @@ func main() {
 	}
 
 	config := initConfigInformation()
+	fmt.Printf("%+v", config)
 
 	gormDB, err := gorm.Open(mysql.Open(config.DataBase.DataSourceName), &gorm.Config{})
 	// gormDB, err := gorm.Open(sqlite.Open("ginsample.db"), &gorm.Config{})
@@ -66,7 +67,7 @@ func main() {
 func initGinApp(gormDB *gorm.DB) *gin.Engine {
 
 	setSqlDBConfig(gormDB)
-	r := routers.InitRouter(gormDB)
+	r := InitRouter(gormDB)
 
 	return r
 }
@@ -91,4 +92,23 @@ func setSqlDBConfig(gormDB *gorm.DB) {
 	sqlDB.SetMaxOpenConns(20)
 	// SetConnMaxLifetime 设置了连接可复用的最大时间。
 	sqlDB.SetConnMaxLifetime(100 * time.Second)
+}
+
+func InitRouter(gormDB *gorm.DB) *gin.Engine {
+	gin.SetMode(configutil.ConfigValue.GinMode)
+
+	r := gin.New()
+
+	r.Static("/static", "static")
+
+	r.Use(gin.Recovery())
+	r.Use(middleware.SetRequestID())
+	r.Use(middleware.SetDBMiddleware(gormDB))
+	if configutil.ConfigValue.Log.Useable {
+		r.Use(middleware.LogMiddleWare(configutil.ConfigValue.Log.LogFilePath, configutil.ConfigValue.Log.LogFileName))
+	}
+
+	routers.SetRouters(r)
+
+	return r
 }
