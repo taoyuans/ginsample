@@ -15,13 +15,16 @@ RUN echo ">>> 1: go version" && go version \
 # make application docker image use alpine
 FROM golang:alpine
 
+WORKDIR /go/bin/logs
 WORKDIR /go/bin/
 # copy config files to image
 COPY --from=builder /go/src/app/config/config.yml /go/bin/config/config.yml
 COPY --from=builder /go/src/app/config/prod/config.yml /go/bin/config/prod/config.yml
 # COPY --from=builder /go/src/app/ginsample.db ./go/bin/ginsample.db
+
 # copy execute file to image
 COPY --from=builder /go/bin/ ./
+
 
 EXPOSE 9001
 

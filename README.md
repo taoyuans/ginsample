@@ -64,9 +64,18 @@ go test ./component/models
 
 ## docker run
 
+#### normal
+
 ```
 docker build -f dockerfile -t ginsample-image:latest .
 docker run -d --name ginsample-container -i -e APP_ENV=prod -p 40001:9001 ginsample-image:latest
+```
+
+#### use alpine(need understanding of the project structure and configuration)
+
+```
+docker build -f dockerfile_alpine -t ginsample-image:latest .
+docker run -d --name ginsample-container --network mingxie-network -v /Users/limingxie/volumes/ginsample/logs:/go/bin/logs:rw -i -e APP_ENV=prod -p 40001:9001 ginsample-image:latest
 ```
 
 ## Import

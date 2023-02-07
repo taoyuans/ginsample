@@ -3,6 +3,7 @@ package factory
 import (
 	"context"
 
+	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	// opentracing "github.com/opentracing/opentracing-go"
 )
@@ -18,6 +19,17 @@ func DB(ctx context.Context) *gorm.DB {
 		return db
 	}
 	panic("DB is not exist")
+}
+
+func Logger(ctx context.Context) *logrus.Logger {
+	v := ctx.Value("Logger")
+	if v == nil {
+		panic("Logger is not exist")
+	}
+	if logger, ok := v.(*logrus.Logger); ok {
+		return logger
+	}
+	panic("Logger is not exist")
 }
 
 // func Redis(ctx context.Context) cache.Cache {

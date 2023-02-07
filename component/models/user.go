@@ -27,6 +27,9 @@ func (User) GetApps(ctx context.Context) ([]User, error) {
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, errs.Trace(err)
 	}
+
+	factory.Logger(ctx).Info("log_info test")
+
 	return users, nil
 }
 

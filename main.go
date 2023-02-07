@@ -3,8 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io"
-	"log"
 	"os"
 	"time"
 
@@ -15,8 +13,10 @@ import (
 	"ginsample/lib/goutils"
 
 	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
+
+	"gorm.io/driver/mysql"
 	_ "gorm.io/driver/mysql"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -41,8 +41,8 @@ func main() {
 
 	config := initConfigInformation()
 
-	// gormDB, err := gorm.Open(mysql.Open(config.DataBase.DataSourceName), &gorm.Config{})
-	gormDB, err := gorm.Open(sqlite.Open("ginsample.db"), &gorm.Config{})
+	gormDB, err := gorm.Open(mysql.Open(config.DataBase.DataSourceName), &gorm.Config{})
+	// gormDB, err := gorm.Open(sqlite.Open("ginsample.db"), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
@@ -64,15 +64,8 @@ func main() {
 }
 
 func initGinApp(gormDB *gorm.DB) *gin.Engine {
+
 	setSqlDBConfig(gormDB)
-
-	// Logging to a file.
-	f, _ := os.Create("gin.log")
-	gin.DefaultWriter = io.MultiWriter(f)
-
-	gin.DisableConsoleColor()
-	// gin.ForceConsoleColor()
-
 	r := routers.InitRouter(gormDB)
 
 	return r

@@ -66,9 +66,18 @@ go test ./component/models
 
 ## docker run
 
+#### 普通方式
+
 ```
 docker build -f dockerfile -t ginsample-image:latest .
 docker run -d --name ginsample-container -i -e APP_ENV=prod -p 40001:9001 ginsample-image:latest
+```
+
+#### 使用alpine(需要对项目和配置有一定的了解)
+
+```
+docker build -f dockerfile_alpine -t ginsample-image:latest .
+docker run -d --name ginsample-container --network mingxie-network -v /Users/limingxie/volumes/ginsample/logs:/go/bin/logs:rw -i -e APP_ENV=prod -p 40001:9001 ginsample-image:latest
 ```
 
 ## Import
