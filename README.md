@@ -6,6 +6,8 @@ English | [简体中文](https://github.com/taoyuans/ginsample/blob/main/README_
 
 Gin + gorm + mysql(sqlite)
 
+#### this structure is suitable for small api services
+
 ## Directory
 
 ```

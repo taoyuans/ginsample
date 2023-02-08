@@ -11,6 +11,7 @@ import (
 	"gorm.io/gorm"
 
 	"ginsample/component/models"
+	configutil "ginsample/config"
 	"ginsample/lib/middleware"
 )
 
@@ -20,10 +21,10 @@ var (
 )
 
 func init() {
-	// var config configutil.Config
-	// if err := configutil.Read(*appEnv, &config); err != nil {
-	// 	panic(err)
-	// }
+	var config configutil.Config
+	if err := configutil.Read(*appEnv, &config); err != nil {
+		panic(err)
+	}
 
 	gormDB, err := gorm.Open(sqlite.Open("ginsample.db"), &gorm.Config{})
 	if err != nil {
@@ -33,7 +34,7 @@ func init() {
 	gormDB.AutoMigrate(&models.User{})
 	models.InitData(gormDB)
 
-	// gin.SetMode(config.ConfigValue.GinMode)
+	gin.SetMode(configutil.ConfigValue.GinMode)
 
 	r = gin.New()
 

@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"os"
 
+	configutil "ginsample/config"
+
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -13,10 +15,15 @@ import (
 
 var ctx context.Context
 var (
-	appEnv = flag.String("app-env", os.Getenv("APP_ENV"), "app env")
+	appEnv = flag.String("app-env", "test", "app env")
 )
 
 func init() {
+	var config configutil.Config
+	if err := configutil.Read(*appEnv, &config); err != nil {
+		panic(err)
+	}
+
 	gormDB, err := gorm.Open(sqlite.Open("ginsample.db"), &gorm.Config{})
 	if err != nil {
 		panic(err)

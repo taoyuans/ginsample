@@ -8,6 +8,8 @@
 
 - Gin + gorm + mysql(sqlite)
 
+该结构适合用在小型的接口服务。
+
 ## Directory
 
 ```

@@ -28,18 +28,21 @@ type Config struct {
 }
 
 func Read(env string, config *Config) error {
+	var configFilePath = "config/"
 	if env == "" {
 		env = "dev"
+	} else if env == "test" {
+		configFilePath = "../../config/"
 	}
 	viper.SetConfigName("config")
-	viper.AddConfigPath("config/.")
+	viper.AddConfigPath(configFilePath)
 
 	if err := viper.ReadInConfig(); err != nil {
 		return fmt.Errorf("Fatal error config file: %s \n", err)
 	}
 
 	if env != "" {
-		f, err := os.Open("config/" + env + "/config.yml")
+		f, err := os.Open(configFilePath + env + "/config.yml")
 		if err != nil {
 			return fmt.Errorf("Fatal error config file: %s \n", err)
 		}
