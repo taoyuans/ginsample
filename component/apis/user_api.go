@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 type UserApi struct {
@@ -25,8 +26,16 @@ func (c UserApi) GetUsers(ctx *gin.Context) {
 		response.ApiFail(ctx, response.ApiErrorDB, err, nil)
 	}
 
-	fmt.Printf("%v", configutil.ConfigValue)
-	factory.Logger(ctx.Request.Context()).Warn("log_warn test")
+	//use config value
+	fmt.Printf("【apis】:connfig value test http_port => %s\n", configutil.ConfigValue.HttpPort)
+
+	//add log
+	factory.Logger(ctx.Request.Context()).Info("【apis】log test => log_info")
+	factory.Logger(ctx.Request.Context()).WithFields(logrus.Fields{
+		"test_field": "heihei",
+		"msg":        "no msg",
+		"request_id": ctx.Request.Header.Get("X-Request-Id"),
+	}).Warn()
 
 	response.ApiSucc(ctx, http.StatusOK, result)
 }

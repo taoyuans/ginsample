@@ -2,6 +2,8 @@ package models
 
 import (
 	"context"
+	"fmt"
+	configutil "ginsample/config"
 	"ginsample/lib/errs"
 	"ginsample/lib/factory"
 
@@ -28,7 +30,11 @@ func (User) GetUsers(ctx context.Context) ([]User, error) {
 		return nil, errs.Trace(err)
 	}
 
-	factory.Logger(ctx).Info("log_info test")
+	//use config value
+	fmt.Printf("【models】connfig value test service => %s\n", configutil.ConfigValue.Service)
+
+	//add log
+	factory.Logger(ctx).Info("【models】log test => log_info")
 
 	return users, nil
 }

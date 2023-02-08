@@ -21,6 +21,9 @@ ginsample
     │   ├── models   --> # 详细
     │   │   ├── xxx.go
     │   │   └── xxx.go
+    │   ├── routers   --> # 路由信息
+    │   │   ├── xxx.go
+    │   │   └── xxx.go
     │   └── service  --> # 不推荐使用，简单的用models
     │   │   ├── xxx.go
     │   │   └── xxx.go

@@ -1,6 +1,8 @@
 package middleware
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gofrs/uuid"
 )
@@ -10,10 +12,9 @@ func SetRequestID() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		uuidV4, err := uuid.NewV4()
 		if err != nil {
-
+			fmt.Printf("middleware SetRequestID func err :%v", err)
 		}
-
-		ctx.Header("X-Request-Id", uuidV4.String())
+		ctx.Request.Header.Add("X-Request-Id", uuidV4.String())
 
 		ctx.Next()
 	}

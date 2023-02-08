@@ -19,6 +19,9 @@ ginsample
     │   ├── models   --> # source code
     │   │   ├── xxx.go
     │   │   └── xxx.go
+    │   ├── routers   --> # router 
+    │   │   ├── xxx.go
+    │   │   └── xxx.go
     │   └── service  --> # not Recommended, use models
     │   │   ├── xxx.go
     │   │   └── xxx.go

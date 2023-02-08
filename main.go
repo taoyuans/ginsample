@@ -31,8 +31,10 @@ func main() {
 		flag.Usage()
 		os.Exit(1)
 	}
+	fmt.Println("<----------------------ginsample start------------------------->")
 	fmt.Printf(" - using mode:		mode = %s\n", *mode)
 	fmt.Printf(" - using app_env:	app_env = %s\n", *appEnv)
+	fmt.Println("<-------------------------------------------------------------->")
 
 	if !goutils.InArrayString(*appEnv, []string{"dev", "test", "prod"}) {
 		fmt.Printf("[ERROR]  app_env=%s is not allowed.\n", *appEnv)
@@ -40,8 +42,6 @@ func main() {
 	}
 
 	config := initConfigInformation()
-	fmt.Printf("%+v", config)
-
 	gormDB, err := gorm.Open(mysql.Open(config.DataBase.DataSourceName), &gorm.Config{})
 	// gormDB, err := gorm.Open(sqlite.Open("ginsample.db"), &gorm.Config{})
 	if err != nil {
@@ -65,7 +65,6 @@ func main() {
 }
 
 func initGinApp(gormDB *gorm.DB) *gin.Engine {
-
 	setSqlDBConfig(gormDB)
 	r := InitRouter(gormDB)
 
