@@ -13,7 +13,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func LogMiddleWare(logFilePath, logFileName string) gin.HandlerFunc {
+func SetLogMiddleWare(logFilePath, logFileName string) gin.HandlerFunc {
 	// create log filename
 	fileName := path.Join(logFilePath, logFileName)
 	// open file

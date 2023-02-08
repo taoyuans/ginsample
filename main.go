@@ -105,7 +105,7 @@ func InitRouter(gormDB *gorm.DB) *gin.Engine {
 	r.Use(middleware.SetRequestID())
 	r.Use(middleware.SetDBMiddleware(gormDB))
 	if configutil.ConfigValue.Log.Useable {
-		r.Use(middleware.LogMiddleWare(configutil.ConfigValue.Log.LogFilePath, configutil.ConfigValue.Log.LogFileName))
+		r.Use(middleware.SetLogMiddleWare(configutil.ConfigValue.Log.LogFilePath, configutil.ConfigValue.Log.LogFileName))
 	}
 
 	routers.SetRouters(r)

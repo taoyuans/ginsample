@@ -21,7 +21,7 @@ func (User) TableName() string {
 	return "users"
 }
 
-func (User) GetApps(ctx context.Context) ([]User, error) {
+func (User) GetUsers(ctx context.Context) ([]User, error) {
 	var users []User
 	err := factory.DB(ctx).Find(&users).Error
 	if err != nil && err != gorm.ErrRecordNotFound {

@@ -20,12 +20,12 @@ func (c UserApi) Test(ctx *gin.Context) {
 }
 
 func (c UserApi) GetUsers(ctx *gin.Context) {
-	result, err := models.User{}.GetApps(ctx.Request.Context())
+	result, err := models.User{}.GetUsers(ctx.Request.Context())
 	if err != nil {
 		response.ApiFail(ctx, response.ApiErrorDB, err, nil)
 	}
-	fmt.Printf("%v", configutil.ConfigValue)
 
+	fmt.Printf("%v", configutil.ConfigValue)
 	factory.Logger(ctx.Request.Context()).Warn("log_warn test")
 
 	response.ApiSucc(ctx, http.StatusOK, result)

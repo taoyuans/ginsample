@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/sirupsen/logrus"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -24,6 +25,7 @@ func init() {
 	InitData(gormDB)
 
 	ctx = context.WithValue(context.Background(), "DB", gormDB)
+	ctx = context.WithValue(ctx, "Logger", logrus.New())
 
 	defer RemoveSqlite()
 }
