@@ -72,7 +72,6 @@ docker run -d --name ginsample-api-container \
 - web framework: [gin framework](https://github.com/gin-gonic/gin)
 - orm tool: [gorm](https://gorm.io/)
 - logger : [zerolog](https://github.com/rs/zerolog)
-- configuration tool: [nacos](https://github.com/nacos-group/nacos-sdk-go)
 
 ----------------------------------------------
 
