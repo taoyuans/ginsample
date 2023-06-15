@@ -1,0 +1,23 @@
+Service: ginsample
+HttpPort: 33888
+UseJwtAuth: false
+
+Mysql:
+  DataSourceName: root:1234@tcp(192.168.3.244:3306)/ginsample?charset=utf8&parseTime=true&loc=Asia%2FShanghai
+  MaxOpenConn: 20
+  MaxIdleConn: 10
+  MaxConnLifeTime: 100
+
+Redis:
+  DataSourceName: 127.0.0.1:6379
+  DB: 0
+  Password: 
+
+
+Log:
+  LogLevel: 1
+  LogFilePath: ./logs
+  LogFileName: ginsample.log
+  LogMaxSize: 50
+  LogMaxBackups: 10
+  LogMaxAge: 30
