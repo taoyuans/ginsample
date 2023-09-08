@@ -12,6 +12,7 @@ import (
 	cconfig "ginsample/config"
 	"ginsample/lib/middleware"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/driver/mysql"
@@ -99,7 +100,8 @@ func setMiddlewareAndRouter(gormDB *gorm.DB, redis *redis.Client) *gin.Engine {
 	r.Use(middleware.SetRequestID())
 
 	// 跨域设定
-	r.Use(middleware.Cors())
+	r.Use(cors.Default())
+	// r.Use(middleware.Cors())
 
 	// 添加DB连接
 	r.Use(middleware.SetMysqlMiddleware(gormDB))
